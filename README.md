@@ -1,4 +1,4 @@
-# Asynchronous and Fast API Wrapper for Kitsu.io (Alpha)
+# An Asynchronous and Fast API Wrapper for Kitsu.io
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)

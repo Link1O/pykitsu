@@ -78,11 +78,11 @@ class Client:
                             if self.debug_outputs:
                                 print(f"{Fore.BLUE}[pykitsu: {Fore.RED}debug output{Fore.BLUE}] {Fore.MAGENTA}data fetched.{Fore.RESET}")
                         else:
-                            raise NO_DATA_FOUND()
+                            raise NO_DATA_FOUND
                     elif response.status == 429:
-                        raise RATE_LIMITED()
+                        raise RATE_LIMITED
                     else:
-                        raise FETCH_ERROR()
+                        raise FETCH_ERROR
         async def kitsu_link(self, offset: int = 0):
             """
             the link of the anime/manga
@@ -405,9 +405,9 @@ class Client:
                         if self.debug_outputs:
                             print(f"{Fore.BLUE}[pykitsu: {Fore.RED}debug output{Fore.BLUE}] {Fore.MAGENTA}data fetched.{Fore.RESET}")
                     elif response.status == 429:
-                        raise RATE_LIMITED()
+                        raise RATE_LIMITED
                     else: 
-                        raise FETCH_ERROR()
+                        raise FETCH_ERROR
         async def id(self, offset: int = 0):
             """
             the id of the anime/manga
