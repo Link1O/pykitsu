@@ -352,7 +352,7 @@ class Client:
     class search_by_id:
         pass
     class random:
-        def __init__(self, type: Literal["anime", "manga"], title_type: str = "en_jp", poster_size: str = "medium", latest_data: bool = False, limit_requests: bool = False, debug_outputs: bool = False):
+        def __init__(self, type: str, title_type: str = "en_jp", poster_size: str = "medium", latest_data: bool = False, limit_requests: bool = False, debug_outputs: bool = False):
             """
             fetches an anime/manga randomly
 

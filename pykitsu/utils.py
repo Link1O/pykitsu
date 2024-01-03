@@ -17,7 +17,7 @@ async def get_latest_id(type: str):
             else:
                 raise FETCH_ERROR
 class _RequestLimiter:
-    def __init__(self, max_requests_per_interval: int = 5, interval_seconds: float = 0.5):
+    def __init__(self, max_requests_per_interval: int = 5, interval_seconds: float = 0.4):
         self.semaphore = asyncio.Semaphore(max_requests_per_interval)
         self.interval_seconds = interval_seconds
     async def _limit_request(self):
