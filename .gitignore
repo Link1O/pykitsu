@@ -1,3 +1,4 @@
 /build
 /pykitsu.egg-info
+/pykitsu/__pycache__
 /__pycache__
