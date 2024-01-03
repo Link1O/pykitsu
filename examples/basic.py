@@ -9,19 +9,22 @@ async def func():
         if search_type != "anime":
             if search_type != "manga":
                 print("invalid search type.")
-                return
-        term = input(f"enter the anime/manga name: ")
+                break
+        term = input(f"enter the {search_type} name: ")
         anime = client.search(search_term=term, type=search_type, debug_outputs=True, limit_requests=True)
-        name = await anime.name()
-        plot = await anime.plot()
-        asd = await anime.airing_start_date()
-        aed = await anime.airing_end_date()
-        idk = await anime.nsfw_status()
-        print(name)
-        print(plot)
-        print(asd)
-        print(aed)
-        print(idk)
-        await anime.clear_cache()
-        break
+        try:
+            name = await anime.name()
+            plot = await anime.plot()
+            airing_start_date = await anime.airing_start_date()
+            airing_end_date = await anime.airing_end_date()
+            nsfw_status = await anime.nsfw_status()
+            print(name)
+            print(plot)
+            print(airing_start_date)
+            print(airing_end_date)
+            print(nsfw_status)
+            await anime.clear_cache()
+            break
+        except NO_DATA_FOUND:
+            print("no results.")
 asyncio.run(func())

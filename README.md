@@ -18,9 +18,9 @@ This is an asynchronous and high-speed Python API wrapper for accessing Kitsu.io
 
 - **easy to learn**: by simplifying the syntax the library can be really easy to grasp.
 
-## Note
+## Notes
 
-you can check the examples [here](https://github.com/ore0Os/pykitsu/blob/main/examples)
+- **usage**: you can check the examples from [here](https://github.com/ore0Os/pykitsu/blob/main/examples)
 
 ## Installation
 
