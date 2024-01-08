@@ -56,7 +56,7 @@ class search_by_id_base:
                 if response.status == 200:
                     self.data = await response.json()
                     if self.data['data']:
-                        self.result = self.data['data'][0]
+                        self.result = self.data['data']
                         self.data_fetched = True
                         if self.debug_outputs:
                             print(f"{Fore.BLUE}[pykitsu: {Fore.RED}debug output{Fore.BLUE}] {Fore.MAGENTA}data fetched.{Fore.RESET}")
