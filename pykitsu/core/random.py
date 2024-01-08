@@ -37,7 +37,6 @@ class random_base:
             async with session.get(url=f"https://kitsu.io/api/edge/{self.type}", params={
             "filter[id]": rand_int
         }) as response:
-                await session.close()
                 if response.status == 200:
                     self.data = await response.json()
                     self.result = self.data['data']
