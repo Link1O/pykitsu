@@ -5,15 +5,13 @@ from ..utils import _RequestLimiter
 from ..exceptions import *
 from ..value_errors import *
 class search_by_id_base:
-    def __init__(self, type: str, id: int, latest_data: bool = False, limit_requests: bool = False, debug_outputs: bool = False):
+    def __init__(self, type: str, id: int, limit_requests: bool = False, debug_outputs: bool = False):
         """
         fetches an anime/manga based on the provided id
 
         parameters:
             type (str): anime/manga
-            title_type (str): the title type, options: en | ja_jp | en_jp (default: en_jp)
-            poster_size (str): the poster size, options: tiny | large | small | medium | original (default: medium)
-            latest_data (bool): fetch the latest data (only use if you want to fetch a newer random animes), options: True | False (defuelt: False)
+            id (int): the anime/manga id
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """
@@ -22,7 +20,6 @@ class search_by_id_base:
         if self.type != "anime":
             if self.type != "manga":
                 raise INVALID_ARGUMENT("search type")
-        self.latest_data = latest_data
         self.limit_requests = limit_requests
         if self.limit_requests:
             self.request_limiter = _RequestLimiter()

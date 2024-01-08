@@ -12,8 +12,6 @@ class random_base:
 
         parameters:
             type (str): anime/manga
-            title_type (str): the title type, options: en | ja_jp | en_jp (default: en_jp)
-            poster_size (str): the poster size, options: tiny | large | small | medium | original (default: medium)
             latest_data (bool): fetch the latest data (only use if you want to fetch a newer random animes), options: True | False (defuelt: False)
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)

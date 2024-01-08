@@ -11,8 +11,6 @@ class search_base:
         parameters:
             type (str): anime/manga
             search_term (str): the anime/manga name
-            title_type (str): the title type, options: en | ja_jp | en_jp (default: en_jp)
-            poster_size (str): the poster size, options: tiny | large | small | medium | original (default: medium)
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """ 
@@ -70,6 +68,8 @@ class search_base:
     async def kitsu_link(self, offset: int = 0):
         """
         the link of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_id:
             id = self.cache_id[self.cache_key]
@@ -82,6 +82,8 @@ class search_base:
     async def id(self, offset: int = 0):
         """
         the id of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_id:
             return self.cache_id[self.cache_key]
@@ -93,6 +95,8 @@ class search_base:
     async def name(self, title_type: str = "en_jp", offset: int = 0):
         """
         the name of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if title_type != "en_jp":
             if title_type != "en":
@@ -108,6 +112,8 @@ class search_base:
     async def plot(self, offset: int = 0):
         """
         the plot of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_plot:
             return self.cache_plot[self.cache_key]
@@ -119,6 +125,8 @@ class search_base:
     async def poster_url(self, poster_size: str = "medium", offset: int = 0):
         """
         the poster image url of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if poster_size != "medium":
             if poster_size != "small":
@@ -136,6 +144,8 @@ class search_base:
     async def favoritesCount(self, offset: int = 0):
         """
         the favorites Count of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_favoritescount:
             return self.cache_favoritescount[self.cache_key]
@@ -147,6 +157,8 @@ class search_base:
     async def averagerating(self, offset: int = 0):
         """
         the average rating of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_averagerating:
             return self.cache_averagerating[self.cache_key]
@@ -158,6 +170,8 @@ class search_base:
     async def rating_rank(self, offset: int = 0):
         """
         the rating rank of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_rating_rank:
             return self.cache_rating_rank[self.cache_key]
@@ -169,6 +183,8 @@ class search_base:
     async def age_rating(self, offset: int = 0):
         """
         the age rating of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_age_rating:
             return self.cache_age_rating[self.cache_key]
@@ -180,6 +196,8 @@ class search_base:
     async def age_rating_type(self, offset: int = 0):
         """
         the age rating type of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_age_rating_type:
             return self.cache_age_rating_type[self.cache_key]
@@ -191,6 +209,8 @@ class search_base:
     async def show_type(self, offset: int = 0):
         """
         the show type of the anime
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_show_type:
@@ -205,6 +225,8 @@ class search_base:
     async def manga_type(self, offset: int = 0):
         """
         the manga type of the manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.type == "manga":
             if self.cache_key in self.cache_manga_type:
@@ -219,6 +241,8 @@ class search_base:
     async def airing_start_date(self, offset: int = 0):
         """
         the airing start date of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_airing_start_date:
             return self.cache_airing_start_date[self.cache_key]
@@ -230,6 +254,8 @@ class search_base:
     async def airing_end_date(self, offset: int = 0):
         """
         the airing end date of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_airing_end_date:
             return self.cache_airing_end_date[self.cache_key]
@@ -241,6 +267,8 @@ class search_base:
     async def nsfw_status(self, offset: int = 0):
         """
         the nsfw status of the anime
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_nsfw_status:
@@ -255,6 +283,8 @@ class search_base:
     async def ep_count(self, offset: int = 0):
         """
         the ep count of the anime
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_ep_count:
@@ -269,6 +299,8 @@ class search_base:
     async def ep_length(self, offset: int = 0):
         """
         the ep length of the anime
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_ep_length:
@@ -283,6 +315,8 @@ class search_base:
     async def ch_count(self, offset: int = 0):
         """
         the ch count of the manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.type == "manga":
             if self.cache_key in self.cache_ch_count:
@@ -297,6 +331,8 @@ class search_base:
     async def vol_count(self, offset: int = 0):
         """
         the vol count of the manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.type == "manga":
             if self.cache_key in self.cache_vol_count:
@@ -311,6 +347,8 @@ class search_base:
     async def status(self, offset: int = 0):
         """
         the airing status of the anime/manga
+        parameters:
+            offset (int): the fetched the data offset, (default: 0)
         """
         if self.cache_key in self.cache_status:
             return self.cache_status[self.cache_key]
