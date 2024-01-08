@@ -38,6 +38,7 @@ class random_base:
             "filter[id]": rand_int
         }) as response:
                 if response.status == 200:
+                    await session.close()
                     self.data = await response.json()
                     self.result = self.data['data']
                     self.data_fetched = True
