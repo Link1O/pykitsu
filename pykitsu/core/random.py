@@ -55,7 +55,7 @@ class random_base:
             id = self.cache_id[self.cache_key]
             return f"https://kitsu.io/{self.type}/{id}"
         if not self.data_fetched:
-            await self._fetch()
+            await self._fetch_random()
         id = self.result[0]["id"]
         self.cache_id[self.cache_key] = id
         return f"https://kitsu.io/{self.type}/{id}"

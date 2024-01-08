@@ -22,7 +22,7 @@ class get_trending_base:
             self.request_limiter = _RequestLimiter()
         self.debug_outputs = debug_outputs
         self.data_fetched = False
-    async def _fetch_random(self):
+    async def _fetch_trending(self):
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
@@ -47,7 +47,7 @@ class get_trending_base:
             id = self.cache_id[self.cache_key]
             return f"https://kitsu.io/{self.type}/{id}"
         if not self.data_fetched:
-            await self._fetch()
+            await self._fetch_trending()
         id = self.result[offset]["id"]
         self.cache_id[self.cache_key] = id
         return f"https://kitsu.io/{self.type}/{id}"
@@ -58,7 +58,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         id = self.result[offset]['id']
         return id
     async def name(self, title_type: str = "en_jp", offset: int = 0):
@@ -72,7 +72,7 @@ class get_trending_base:
                 if title_type != "ja_jp":
                     raise INVALID_ARGUMENT("title type")
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         name = self.result[offset]['attributes']['titles'][self.title_type]
         return name
     async def plot(self, offset: int = 0):
@@ -82,7 +82,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         plot = self.result[offset]['attributes']['synopsis']
         return plot
     async def poster_url(self, poster_size: str = "medium", offset: int = 0):
@@ -98,7 +98,7 @@ class get_trending_base:
                         if poster_size != "original":
                             raise INVALID_ARGUMENT("poster size")
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         poster_url = self.result[offset]['attributes']['posterImage'][self.poster_size]
         return poster_url
     async def favoritesCount(self, offset: int = 0):
@@ -108,7 +108,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         favoritesCount = self.result[offset]['attributes']['favoritesCount']
         return favoritesCount
     async def averagerating(self, offset: int = 0):
@@ -118,7 +118,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         averagerating = self.result[offset]['attributes']['averageRating']
         return averagerating
     async def rating_rank(self, offset: int = 0):
@@ -128,7 +128,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         rating_rank = self.result[offset]['attributes']['ratingRank']
         return rating_rank
     async def age_rating(self, offset: int = 0):
@@ -138,7 +138,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         age_rating = self.result[offset]['attributes']['ageRatingGuide']
         return age_rating
     async def age_rating_type(self, offset: int = 0):
@@ -148,7 +148,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         age_rating_type = self.result[offset]['attributes']['ageRating']
         return age_rating_type
     async def show_type(self, offset: int = 0):
@@ -159,7 +159,7 @@ class get_trending_base:
         """
         if self.type == "anime":
             if not self.data_fetched:
-                await self._fetch_random()
+                await self._fetch_trending()
             show_type = self.result[offset]['attributes']['showType']
             return show_type
         else:
@@ -172,7 +172,7 @@ class get_trending_base:
         """
         if self.type == "manga":
             if not self.data_fetched:
-                await self._fetch_random()
+                await self._fetch_trending()
             manga_type = self.result[offset]['attributes']['mangaType']
             return manga_type
         else:
@@ -184,7 +184,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         airing_start_date = self.result[offset]['attributes']['startDate']
         return airing_start_date
     async def airing_end_date(self, offset: int = 0):
@@ -194,7 +194,7 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         airing_end_date = self.result[offset]['attributes']['endDate']
         return airing_end_date
     async def nsfw_status(self, offset: int = 0):
@@ -205,7 +205,7 @@ class get_trending_base:
         """
         if self.type == "anime":
             if not self.data_fetched:
-                await self._fetch_random()
+                await self._fetch_trending()
             nsfw_status = self.result[offset]['attributes']['nsfw']
             return nsfw_status
         else:
@@ -218,7 +218,7 @@ class get_trending_base:
         """
         if self.type == "anime":
             if not self.data_fetched:
-                await self._fetch_random()
+                await self._fetch_trending()
             ep_count = self.result[offset]['attributes']['episodeCount']
             return ep_count
         else:
@@ -231,7 +231,7 @@ class get_trending_base:
         """
         if self.type == "anime":
             if not self.data_fetched:
-                await self._fetch_random()
+                await self._fetch_trending()
             ep_length = self.result[offset]['attributes']['episodeLength']
             return f"{ep_length}m"
         else:
@@ -244,7 +244,7 @@ class get_trending_base:
         """
         if self.type == "manga":
             if not self.data_fetched:
-                await self._fetch_random()
+                await self._fetch_trending()
             ch_count = self.result[offset]['attributes']['chapterCount']
             return ch_count
         else:
@@ -257,7 +257,7 @@ class get_trending_base:
         """
         if self.type == "manga":
             if not self.data_fetched:
-                await self._fetch_random()
+                await self._fetch_trending()
             vol_count = self.result[offset]['attributes']['volumeCount']
             return vol_count
         else:
@@ -269,6 +269,6 @@ class get_trending_base:
             offset (int): the fetched the data offset, (default: 0)
         """
         if not self.data_fetched:
-            await self._fetch_random()
+            await self._fetch_trending()
         status = self.result[offset]['attributes']['status']
         return status
