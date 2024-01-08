@@ -1,8 +1,7 @@
 from setuptools import setup
 packages = [
     'pykitsu',
-    'pykitsu.client'
-    'pykitsu.exceptions',
+    'pykitsu.core',
     'pykitsu.utils'
 ]
 setup(

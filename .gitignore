@@ -1,5 +1,7 @@
-/build
-/pykitsu.egg-info
 /pykitsu/__pycache__
+/pykitsu/core/__pycache__
 /examples/__pycache__
 /__pycache__
+/debug
+/build
+/pykitsu.egg-info

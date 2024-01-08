@@ -1,6 +1,6 @@
 # An Asynchronous and Fast API Wrapper for Kitsu.io
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ore0Os/pykitsu/blob/main/LICENCE)
 [![Python](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![GitHub issues](https://img.shields.io/github/issues/ore0Os/pykitsu.svg)](https://github.com/ore0Os/pykitsu/issues)
 [![GitHub stars](https://img.shields.io/github/stars/ore0Os/pykitsu.svg)](https://github.com/ore0Os/pykitsu/stargazers)
