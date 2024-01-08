@@ -24,7 +24,7 @@ class search_by_id_base:
         if self.limit_requests:
             self.request_limiter = _RequestLimiter()
         self.debug_outputs = debug_outputs
-        self.cache_key = (self.type, self.search_term)
+        self.cache_key = (self.type, self.id)
         self.cache_id = {}
         self.cache_name = {}
         self.cache_plot = {}
