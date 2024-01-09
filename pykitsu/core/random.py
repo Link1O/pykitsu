@@ -6,7 +6,7 @@ from ..utils import get_latest
 from ..exceptions import *
 from ..value_errors import *
 class random_base:
-    def __init__(self, type: str, get_latest: bool = False, limit_requests: bool = False, debug_outputs: bool = False):
+    def __init__(self, type: str, limit_requests: bool = False, debug_outputs: bool = False):
         """
         fetches an anime/manga randomly
 
@@ -20,17 +20,13 @@ class random_base:
         if self.type != "anime":
             if self.type != "manga":
                 raise INVALID_ARGUMENT("search type")
-        self.get_latest = get_latest
         self.limit_requests = limit_requests
         if self.limit_requests:
             self.request_limiter = _RequestLimiter()
         self.debug_outputs = debug_outputs
         self.data_fetched = False
     async def _fetch_random(self):
-        if self.get_latest:
-            rand_int = random.randint(1, await get_latest(type=self.type))
-        else:
-            rand_int = random.randint(1, 1900)
+        rand_int = random.randint(1, await get_latest(type=self.type))
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
