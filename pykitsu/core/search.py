@@ -69,7 +69,7 @@ class search_base:
         """
         the link of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_id:
             id = self.cache_id[self.cache_key]
@@ -83,7 +83,7 @@ class search_base:
         """
         the id of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_id:
             return self.cache_id[self.cache_key]
@@ -96,7 +96,7 @@ class search_base:
         """
         the name of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if title_type != "en_jp":
             if title_type != "en":
@@ -113,7 +113,7 @@ class search_base:
         """
         the plot of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_plot:
             return self.cache_plot[self.cache_key]
@@ -126,7 +126,7 @@ class search_base:
         """
         the poster image url of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if poster_size != "medium":
             if poster_size != "small":
@@ -145,7 +145,7 @@ class search_base:
         """
         the favorites Count of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_favoritescount:
             return self.cache_favoritescount[self.cache_key]
@@ -158,7 +158,7 @@ class search_base:
         """
         the average rating of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_averagerating:
             return self.cache_averagerating[self.cache_key]
@@ -171,7 +171,7 @@ class search_base:
         """
         the rating rank of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_rating_rank:
             return self.cache_rating_rank[self.cache_key]
@@ -184,7 +184,7 @@ class search_base:
         """
         the age rating of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_age_rating:
             return self.cache_age_rating[self.cache_key]
@@ -197,7 +197,7 @@ class search_base:
         """
         the age rating type of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_age_rating_type:
             return self.cache_age_rating_type[self.cache_key]
@@ -210,7 +210,7 @@ class search_base:
         """
         the show type of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_show_type:
@@ -226,7 +226,7 @@ class search_base:
         """
         the manga type of the manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "manga":
             if self.cache_key in self.cache_manga_type:
@@ -242,7 +242,7 @@ class search_base:
         """
         the airing start date of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_airing_start_date:
             return self.cache_airing_start_date[self.cache_key]
@@ -255,7 +255,7 @@ class search_base:
         """
         the airing end date of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_airing_end_date:
             return self.cache_airing_end_date[self.cache_key]
@@ -268,7 +268,7 @@ class search_base:
         """
         the nsfw status of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_nsfw_status:
@@ -284,7 +284,7 @@ class search_base:
         """
         the ep count of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_ep_count:
@@ -300,7 +300,7 @@ class search_base:
         """
         the ep length of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if self.cache_key in self.cache_ep_length:
@@ -316,7 +316,7 @@ class search_base:
         """
         the ch count of the manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "manga":
             if self.cache_key in self.cache_ch_count:
@@ -332,7 +332,7 @@ class search_base:
         """
         the vol count of the manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "manga":
             if self.cache_key in self.cache_vol_count:
@@ -348,7 +348,7 @@ class search_base:
         """
         the airing status of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_status:
             return self.cache_status[self.cache_key]

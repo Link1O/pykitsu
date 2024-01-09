@@ -42,7 +42,7 @@ class get_trending_base:
         """
         the link of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.cache_key in self.cache_id:
             id = self.cache_id[self.cache_key]
@@ -56,7 +56,7 @@ class get_trending_base:
         """
         the id of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -66,7 +66,7 @@ class get_trending_base:
         """
         the name of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if title_type != "en_jp":
             if title_type != "en":
@@ -80,7 +80,7 @@ class get_trending_base:
         """
         the plot of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -90,7 +90,7 @@ class get_trending_base:
         """
         the poster image url of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if poster_size != "medium":
             if poster_size != "small":
@@ -106,7 +106,7 @@ class get_trending_base:
         """
         the favorites Count of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -116,7 +116,7 @@ class get_trending_base:
         """
         the average rating of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -126,7 +126,7 @@ class get_trending_base:
         """
         the rating rank of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -136,7 +136,7 @@ class get_trending_base:
         """
         the age rating of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -146,7 +146,7 @@ class get_trending_base:
         """
         the age rating type of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -156,7 +156,7 @@ class get_trending_base:
         """
         the show type of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if not self.data_fetched:
@@ -169,7 +169,7 @@ class get_trending_base:
         """
         the manga type of the manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "manga":
             if not self.data_fetched:
@@ -182,7 +182,7 @@ class get_trending_base:
         """
         the airing start date of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -192,7 +192,7 @@ class get_trending_base:
         """
         the airing end date of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
@@ -202,7 +202,7 @@ class get_trending_base:
         """
         the nsfw status of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if not self.data_fetched:
@@ -215,7 +215,7 @@ class get_trending_base:
         """
         the ep count of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if not self.data_fetched:
@@ -228,7 +228,7 @@ class get_trending_base:
         """
         the ep length of the anime
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "anime":
             if not self.data_fetched:
@@ -241,7 +241,7 @@ class get_trending_base:
         """
         the ch count of the manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "manga":
             if not self.data_fetched:
@@ -254,7 +254,7 @@ class get_trending_base:
         """
         the vol count of the manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if self.type == "manga":
             if not self.data_fetched:
@@ -267,7 +267,7 @@ class get_trending_base:
         """
         the airing status of the anime/manga
         parameters:
-            offset (int): the fetched the data offset, (default: 0)
+            offset (int): the fetched data offset, (default: 0)
         """
         if not self.data_fetched:
             await self._fetch_trending()
