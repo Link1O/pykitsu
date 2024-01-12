@@ -53,8 +53,8 @@ class search_by_id_base:
             "filter[id]": self.id
         }) as response:
                 if response.status == 200:
-                    await session.close()
                     self.data = await response.json()
+                    await session.close()
                     if self.data['data']:
                         self.result = self.data['data']
                         self.data_fetched = True

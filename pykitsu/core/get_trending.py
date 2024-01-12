@@ -28,8 +28,8 @@ class get_trending_base:
         async with aiohttp.ClientSession() as session:
             async with session.get(url=f"https://kitsu.io/api/edge/trending/{self.type}") as response:
                 if response.status == 200:
-                    await session.close()
                     self.data = await response.json()
+                    await session.close()
                     self.result = self.data['data']
                     self.data_fetched = True
                     if self.debug_outputs:

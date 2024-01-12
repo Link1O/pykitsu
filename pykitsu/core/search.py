@@ -52,8 +52,8 @@ class search_base:
             "filter[text]": self.search_term
         }) as response:
                 if response.status == 200:
-                    await session.close()
                     self.data = await response.json()
+                    await session.close()
                     if self.data['data']:
                         self.result = self.data['data']
                         self.data_fetched = True
