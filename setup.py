@@ -6,7 +6,7 @@ packages = [
 ]
 setup(
     name='pykitsu',
-    version='0.3.4',
+    version='0.3.5',
     description='kitsu.io python api wrapper',
     long_description='an asynchronous and fast api wrapper for kitsu.io',
     author='Ore',
@@ -20,7 +20,6 @@ setup(
     keywords='asynchronous fast kitsu wrapper',
     install_requires=[
         'aiohttp',
-        'asyncio',
         'colorama'
     ],
 )

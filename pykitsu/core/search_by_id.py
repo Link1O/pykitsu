@@ -1,11 +1,11 @@
 import aiohttp
-import random
+from typing import Literal, Optional
 from colorama import Fore
 from ..utils import _RequestLimiter
 from ..exceptions import *
 from ..value_errors import *
 class search_by_id_base:
-    def __init__(self, type: str, id: int, limit_requests: bool = False, debug_outputs: bool = False):
+    def __init__(self, type: Literal["anime", "manga"], id: int, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
         """
         fetches an anime/manga based on the provided id
 
@@ -17,9 +17,9 @@ class search_by_id_base:
         """
         self.id = id
         self.type = type
-        if self.type != "anime":
-            if self.type != "manga":
-                raise INVALID_ARGUMENT("search type")
+        valid_types = {"anime", "manga"}
+        if self.type not in valid_types:
+            raise INVALID_ARGUMENT("search type")
         self.limit_requests = limit_requests
         if self.limit_requests:
             self.request_limiter = _RequestLimiter()
@@ -93,10 +93,9 @@ class search_by_id_base:
         """
         the name of the anime/manga
         """
-        if title_type != "en_jp":
-            if title_type != "en":
-                if title_type != "ja_jp":
-                    raise INVALID_ARGUMENT("title type")
+        valid_title_types = {"en_jp", "en", "ja_jp"}
+        if title_type not in valid_title_types:
+            raise INVALID_ARGUMENT("title type")
         if self.cache_key in self.cache_name:
             return self.cache_name[self.cache_key]
         if not self.data_fetched:
@@ -119,12 +118,9 @@ class search_by_id_base:
         """
         the poster image url of the anime/manga
         """
-        if poster_size != "medium":
-            if poster_size != "small":
-                if poster_size != "large": 
-                    if poster_size != "tiny":
-                        if poster_size != "original":
-                            raise INVALID_ARGUMENT("poster size")
+        valid_poster_sizes = {"medium", "small", "large", "tiny", "original"}
+        if poster_size not in valid_poster_sizes:
+            raise INVALID_ARGUMENT("poster size")
         if self.cache_key in self.cache_poster_url:
             return self.cache_poster_url[self.cache_key]
         if not self.data_fetched:

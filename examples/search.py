@@ -31,6 +31,7 @@ async def func():
             print(airing_start_date)
             print(airing_end_date)
             print(nsfw_status)
+            # clear the cache
             await anime.clear_cache()
             # end the loop
             break

@@ -20,7 +20,7 @@ async def get_id(type: str, search_term: str, offset: int = 0):
                 raise FETCH_ERROR
 async def get_latest(type: str):
    """
-   gets the latest added anime/manga (returns the id)
+   gets the latest added anime/manga id
    """
    async with aiohttp.ClientSession() as session:
         async with session.get(url=f"https://kitsu.io/api/edge/{type}", params={

@@ -29,7 +29,6 @@ async def func():
             print(airing_start_date)
             print(airing_end_date)
             print(nsfw_status)
-            await anime.clear_cache()
             # end the loop
             break
         except NO_DATA_FOUND:

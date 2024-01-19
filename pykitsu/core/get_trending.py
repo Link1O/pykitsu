@@ -1,10 +1,11 @@
 import aiohttp
+from typing import Literal, Optional
 from colorama import Fore
 from ..utils import _RequestLimiter
 from ..exceptions import *
 from ..value_errors import *
 class get_trending_base:
-    def __init__(self, type: str, limit_requests: bool = False, debug_outputs: bool = False):
+    def __init__(self, type: Literal["anime", "manga"], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
         """
         fetches an anime/manga randomly
 
@@ -14,9 +15,9 @@ class get_trending_base:
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """
         self.type = type
-        if self.type != "anime":
-            if self.type != "manga":
-                raise INVALID_ARGUMENT("search type")
+        valid_types = {"anime", "manga"}
+        if self.type not in valid_types:
+            raise INVALID_ARGUMENT("search type")
         self.limit_requests = limit_requests
         if self.limit_requests:
             self.request_limiter = _RequestLimiter()
@@ -38,7 +39,7 @@ class get_trending_base:
                     raise RATE_LIMITED
                 else: 
                     raise FETCH_ERROR
-    async def kitsu_link(self, offset: int = 0):
+    async def link(self, offset: int = 0):
         """
         the link of the anime/manga
         parameters:
@@ -68,10 +69,9 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if title_type != "en_jp":
-            if title_type != "en":
-                if title_type != "ja_jp":
-                    raise INVALID_ARGUMENT("title type")
+        valid_title_types = {"en_jp", "en", "ja_jp"}
+        if title_type not in valid_title_types:
+            raise INVALID_ARGUMENT("title type")
         if not self.data_fetched:
             await self._fetch_trending()
         name = self.result[offset]['attributes']['titles'][self.title_type]
@@ -92,12 +92,9 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if poster_size != "medium":
-            if poster_size != "small":
-                if poster_size != "large": 
-                    if poster_size != "tiny":
-                        if poster_size != "original":
-                            raise INVALID_ARGUMENT("poster size")
+        valid_poster_sizes = {"medium", "small", "large", "tiny", "original"}
+        if poster_size not in valid_poster_sizes:
+            raise INVALID_ARGUMENT("poster size")
         if not self.data_fetched:
             await self._fetch_trending()
         poster_url = self.result[offset]['attributes']['posterImage'][self.poster_size]
