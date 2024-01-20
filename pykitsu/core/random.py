@@ -31,7 +31,7 @@ class random_base:
         if self.range_from_latest:
             rand_int = random.randint(1, await get_latest(type=self.type))
         else:
-            rand_int = random.randint(1, 1960)
+            rand_int = random.randint(1, 1600)
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
