@@ -6,7 +6,7 @@ packages = [
 ]
 setup(
     name='pykitsu',
-    version='0.3.5',
+    version='0.3.6',
     description='kitsu.io python api wrapper',
     long_description='an asynchronous and fast api wrapper for kitsu.io',
     author='Ore',

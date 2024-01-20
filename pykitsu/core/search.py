@@ -92,7 +92,7 @@ class search_base:
             await self._fetch()
         id = self.result[offset]['id']
         self.cache_id[self.cache_key] = id
-        return id
+        return int(id)
     async def name(self, title_type: str = "en_jp", offset: int = 0):
         """
         the name of the anime/manga

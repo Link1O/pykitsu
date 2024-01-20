@@ -7,17 +7,18 @@ from ..utils import get_latest
 from ..exceptions import *
 from ..value_errors import *
 class random_base:
-    def __init__(self, type: Literal["anime", "manga"], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
+    def __init__(self, type: Literal["anime", "manga"], range_from_latest: Optional[bool] = False, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
         """
         fetches an anime/manga randomly
 
         parameters:
             type (str): anime/manga
-            latest_data (bool): fetch the latest data (only use if you want to fetch a newer random animes), options: True | False (defuelt: False)
+            range_from_latest (bool): fetch the range from the latest added anime/manga (only use if you want to fetch a newer added random animes), options: True | False (defuelt: False)
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """
         self.type = type
+        self.range_from_latest = range_from_latest
         valid_types = {"anime", "manga"}
         if self.type not in valid_types:
             raise INVALID_ARGUMENT("search type")
@@ -27,7 +28,10 @@ class random_base:
         self.debug_outputs = debug_outputs
         self.data_fetched = False
     async def _fetch_random(self):
-        rand_int = random.randint(1, await get_latest(type=self.type))
+        if self.range_from_latest:
+            rand_int = random.randint(1, await get_latest(type=self.type))
+        else:
+            rand_int = random.randint(1, 1960)
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
@@ -64,7 +68,7 @@ class random_base:
         if not self.data_fetched:
             await self._fetch_random()
         id = self.result[0]['id']
-        return id
+        return int(id)
     async def name(self, title_type: str = "en_jp"):
         """
         the name of the anime/manga
@@ -74,7 +78,7 @@ class random_base:
             raise INVALID_ARGUMENT("title type")
         if not self.data_fetched:
             await self._fetch_random()
-        name = self.result[0]['attributes']['titles'][self.title_type]
+        name = self.result[0]['attributes']['titles'][title_type]
         return name
     async def plot(self):
         """
@@ -93,7 +97,7 @@ class random_base:
             raise INVALID_ARGUMENT("poster size")
         if not self.data_fetched:
             await self._fetch_random()
-        poster_url = self.result[0]['attributes']['posterImage'][self.poster_size]
+        poster_url = self.result[0]['attributes']['posterImage'][poster_size]
         return poster_url
     async def favoritesCount(self):
         """

@@ -1,5 +1,6 @@
 import aiohttp
 from pykitsu.exceptions import NO_DATA_FOUND, FETCH_ERROR
+import asyncio
 async def get_id(type: str, search_term: str, offset: int = 0):
     """
     gets the anime/manga id by name
@@ -31,6 +32,6 @@ async def get_latest(type: str):
                 data = await response.json()
                 await session.close()
                 latest_id = data['data'][0]['id']
-                return latest_id
+                return int(latest_id)
             else:
                 raise FETCH_ERROR

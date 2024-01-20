@@ -62,7 +62,7 @@ class get_trending_base:
         if not self.data_fetched:
             await self._fetch_trending()
         id = self.result[offset]['id']
-        return id
+        return int(id)
     async def name(self, title_type: str = "en_jp", offset: int = 0):
         """
         the name of the anime/manga
@@ -74,7 +74,7 @@ class get_trending_base:
             raise INVALID_ARGUMENT("title type")
         if not self.data_fetched:
             await self._fetch_trending()
-        name = self.result[offset]['attributes']['titles'][self.title_type]
+        name = self.result[offset]['attributes']['titles'][title_type]
         return name
     async def plot(self, offset: int = 0):
         """
@@ -97,7 +97,7 @@ class get_trending_base:
             raise INVALID_ARGUMENT("poster size")
         if not self.data_fetched:
             await self._fetch_trending()
-        poster_url = self.result[offset]['attributes']['posterImage'][self.poster_size]
+        poster_url = self.result[offset]['attributes']['posterImage'][poster_size]
         return poster_url
     async def favoritesCount(self, offset: int = 0):
         """
