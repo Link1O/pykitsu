@@ -3,7 +3,7 @@ packages = [
     'pykitsu',
     'pykitsu.core',
     'pykitsu.utils'
-]
+]s
 setup(
     name='pykitsu',
     version='0.3.6',
