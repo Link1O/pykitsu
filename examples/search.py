@@ -1,6 +1,6 @@
 # we import the required packages
+import pykitsu
 from pykitsu import Client
-from pykitsu.exceptions import *
 import asyncio
 # set an instance of the client class
 client = Client()
@@ -35,7 +35,7 @@ async def func():
             await anime.clear_cache()
             # end the loop
             break
-        except NO_DATA_FOUND:
+        except pykitsu.NO_DATA_FOUND:
             print("no results.")
 # run the function using asyncio
 asyncio.run(func())
