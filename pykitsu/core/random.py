@@ -1,8 +1,7 @@
 import aiohttp
 from typing import Literal, Optional
 import random
-from colorama import Fore
-from ..utils import _RequestLimiter
+from ..utils import __RequestLimiter__
 from ..utils import get_latest
 from ..exceptions import *
 from ..value_errors import *
@@ -13,7 +12,7 @@ class random_base:
 
         parameters:
             type (str): anime/manga
-            range_from_latest (bool): fetch the range from the latest added anime/manga (only use if you want to fetch a newer added random animes), options: True | False (defuelt: False)
+            range_from_latest (bool): fetch the range from the latest added anime/manga (unstable), options: True | False (defuelt: False)
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """
@@ -24,7 +23,7 @@ class random_base:
             raise INVALID_ARGUMENT("search type")
         self.limit_requests = limit_requests
         if self.limit_requests:
-            self.request_limiter = _RequestLimiter()
+            self.request_limiter = __RequestLimiter__()
         self.debug_outputs = debug_outputs
         self.data_fetched = False
     async def _fetch_random(self):

@@ -1,7 +1,6 @@
 import aiohttp
 from typing import Literal, Optional
-from colorama import Fore
-from ..utils import _RequestLimiter
+from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class get_trending_base:
@@ -20,7 +19,7 @@ class get_trending_base:
             raise INVALID_ARGUMENT("search type")
         self.limit_requests = limit_requests
         if self.limit_requests:
-            self.request_limiter = _RequestLimiter()
+            self.request_limiter = __RequestLimiter__()
         self.debug_outputs = debug_outputs
         self.data_fetched = False
     async def _fetch_trending(self):

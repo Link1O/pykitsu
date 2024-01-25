@@ -1,7 +1,6 @@
 import aiohttp
 from typing import Literal, Optional
-from colorama import Fore
-from ..utils import _RequestLimiter
+from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class search_base:
@@ -22,7 +21,7 @@ class search_base:
         self.search_term = search_term
         self.limit_requests = limit_requests
         if self.limit_requests:
-            self.request_limiter = _RequestLimiter()
+            self.request_limiter = __RequestLimiter__()
         self.debug_outputs = debug_outputs
         self.cache_key = (self.type, self.search_term)
         self.cache_id = {}

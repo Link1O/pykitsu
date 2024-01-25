@@ -1,6 +1,5 @@
 import aiohttp
 from pykitsu.exceptions import NO_DATA_FOUND, FETCH_ERROR
-import asyncio
 async def get_id(type: str, search_term: str, offset: int = 0):
     """
     gets the anime/manga id by name
