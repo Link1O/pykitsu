@@ -27,7 +27,7 @@ This is an asynchronous and high-speed Python API wrapper for accessing Kitsu.io
 You can install the library using:
 
 ```bash
-pip install git+https://github.com/ore0Os/pykitsu.git
+pip install pykitsu
 ```
 
 and you can install the requirements using:
