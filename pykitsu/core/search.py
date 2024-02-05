@@ -1,10 +1,10 @@
 import aiohttp
-from typing import Literal, Optional
+from typing import Literal, Optional, Any
 from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class search_base:
-    def __init__(self, type: Literal["anime", "manga"], search_term: str, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
+    def __init__(self, type: Literal["anime", "manga"], search_term: Any, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
         """
         fetches an anime/manga based on the provided search term (paginated)
 
