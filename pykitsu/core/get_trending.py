@@ -1,10 +1,10 @@
 import aiohttp
-from typing import Literal, Optional
+from typing import Literal, Union, Optional, Any, NoReturn
 from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class get_trending_base:
-    def __init__(self, type: Literal["anime", "manga"], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
+    def __init__(self, type: Literal["anime", "manga"], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
         """
         fetches an anime/manga randomly
 
@@ -22,7 +22,7 @@ class get_trending_base:
             self.request_limiter = __RequestLimiter__()
         self.debug_outputs = debug_outputs
         self.data_fetched = False
-    async def _fetch_trending(self):
+    async def _fetch_trending(self) -> Union[None, NoReturn]:
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
@@ -38,7 +38,7 @@ class get_trending_base:
                     raise RATE_LIMITED
                 else: 
                     raise FETCH_ERROR
-    async def link(self, offset: int = 0):
+    async def link(self, offset: int = 0) -> str:
         """
         the link of the anime/manga
         parameters:
@@ -52,7 +52,7 @@ class get_trending_base:
         id = self.result[offset]["id"]
         self.cache_id[self.cache_key] = id
         return f"https://kitsu.io/{self.type}/{id}"
-    async def id(self, offset: int = 0):
+    async def id(self, offset: int = 0) -> int:
         """
         the id of the anime/manga
         parameters:
@@ -62,7 +62,7 @@ class get_trending_base:
             await self._fetch_trending()
         id = self.result[offset]['id']
         return int(id)
-    async def name(self, title_type: str = "en_jp", offset: int = 0):
+    async def name(self, title_type: str = "en_jp", offset: int = 0) -> str:
         """
         the name of the anime/manga
         parameters:
@@ -75,7 +75,7 @@ class get_trending_base:
             await self._fetch_trending()
         name = self.result[offset]['attributes']['titles'][title_type]
         return name
-    async def plot(self, offset: int = 0):
+    async def plot(self, offset: int = 0) -> str:
         """
         the plot of the anime/manga
         parameters:
@@ -85,7 +85,7 @@ class get_trending_base:
             await self._fetch_trending()
         plot = self.result[offset]['attributes']['synopsis']
         return plot
-    async def poster_url(self, poster_size: str = "medium", offset: int = 0):
+    async def poster_url(self, poster_size: str = "medium", offset: int = 0) -> str:
         """
         the poster image url of the anime/manga
         parameters:
@@ -98,7 +98,7 @@ class get_trending_base:
             await self._fetch_trending()
         poster_url = self.result[offset]['attributes']['posterImage'][poster_size]
         return poster_url
-    async def favoritesCount(self, offset: int = 0):
+    async def favorites_count(self, offset: int = 0) -> int:
         """
         the favorites Count of the anime/manga
         parameters:
@@ -108,7 +108,7 @@ class get_trending_base:
             await self._fetch_trending()
         favoritesCount = self.result[offset]['attributes']['favoritesCount']
         return favoritesCount
-    async def averagerating(self, offset: int = 0):
+    async def average_rating(self, offset: int = 0) -> int:
         """
         the average rating of the anime/manga
         parameters:
@@ -118,7 +118,7 @@ class get_trending_base:
             await self._fetch_trending()
         averagerating = self.result[offset]['attributes']['averageRating']
         return averagerating
-    async def rating_rank(self, offset: int = 0):
+    async def rating_rank(self, offset: int = 0) -> int:
         """
         the rating rank of the anime/manga
         parameters:
@@ -128,7 +128,7 @@ class get_trending_base:
             await self._fetch_trending()
         rating_rank = self.result[offset]['attributes']['ratingRank']
         return rating_rank
-    async def age_rating(self, offset: int = 0):
+    async def age_rating(self, offset: int = 0) -> int:
         """
         the age rating of the anime/manga
         parameters:
@@ -138,7 +138,7 @@ class get_trending_base:
             await self._fetch_trending()
         age_rating = self.result[offset]['attributes']['ageRatingGuide']
         return age_rating
-    async def age_rating_type(self, offset: int = 0):
+    async def age_rating_type(self, offset: int = 0) -> str:
         """
         the age rating type of the anime/manga
         parameters:
@@ -148,7 +148,7 @@ class get_trending_base:
             await self._fetch_trending()
         age_rating_type = self.result[offset]['attributes']['ageRating']
         return age_rating_type
-    async def show_type(self, offset: int = 0):
+    async def show_type(self, offset: int = 0) -> str:
         """
         the show type of the anime
         parameters:
@@ -161,7 +161,7 @@ class get_trending_base:
             return show_type
         else:
             raise REQUEST_TYPE_ERROR(_function="show_type:", _type_allowed="anime")
-    async def manga_type(self, offset: int = 0):
+    async def manga_type(self, offset: int = 0) -> str:
         """
         the manga type of the manga
         parameters:
@@ -174,7 +174,7 @@ class get_trending_base:
             return manga_type
         else:
             raise REQUEST_TYPE_ERROR(_function="manga_type:", _type_allowed="manga")
-    async def airing_start_date(self, offset: int = 0):
+    async def airing_start_date(self, offset: int = 0) -> str:
         """
         the airing start date of the anime/manga
         parameters:
@@ -184,7 +184,7 @@ class get_trending_base:
             await self._fetch_trending()
         airing_start_date = self.result[offset]['attributes']['startDate']
         return airing_start_date
-    async def airing_end_date(self, offset: int = 0):
+    async def airing_end_date(self, offset: int = 0) -> str:
         """
         the airing end date of the anime/manga
         parameters:
@@ -194,7 +194,7 @@ class get_trending_base:
             await self._fetch_trending()
         airing_end_date = self.result[offset]['attributes']['endDate']
         return airing_end_date
-    async def nsfw_status(self, offset: int = 0):
+    async def nsfw_status(self, offset: int = 0) -> bool:
         """
         the nsfw status of the anime
         parameters:
@@ -207,7 +207,7 @@ class get_trending_base:
             return nsfw_status
         else:
             raise REQUEST_TYPE_ERROR(_function="nsfw_status:", _type_allowed="anime")
-    async def ep_count(self, offset: int = 0):
+    async def ep_count(self, offset: int = 0) -> int:
         """
         the ep count of the anime
         parameters:
@@ -220,7 +220,7 @@ class get_trending_base:
             return ep_count
         else:
             raise REQUEST_TYPE_ERROR(_function="ep_count:", _type_allowed="anime")
-    async def ep_length(self, offset: int = 0):
+    async def ep_length(self, offset: int = 0) -> str:
         """
         the ep length of the anime
         parameters:
@@ -233,7 +233,7 @@ class get_trending_base:
             return f"{ep_length}m"
         else:
             raise REQUEST_TYPE_ERROR(_function="ep_length:", _type_allowed="anime")
-    async def ch_count(self, offset: int = 0):
+    async def ch_count(self, offset: int = 0) -> int:
         """
         the ch count of the manga
         parameters:
@@ -246,7 +246,7 @@ class get_trending_base:
             return ch_count
         else:
             raise REQUEST_TYPE_ERROR(_function="ch_count:", _type_allowed="manga")
-    async def vol_count(self, offset: int = 0):
+    async def vol_count(self, offset: int = 0) -> int:
         """
         the vol count of the manga
         parameters:
@@ -259,7 +259,7 @@ class get_trending_base:
             return vol_count
         else:
             raise REQUEST_TYPE_ERROR(_function="vol_count:", _type_allowed="manga")
-    async def status(self, offset: int = 0):
+    async def status(self, offset: int = 0) -> str:
         """
         the airing status of the anime/manga
         parameters:

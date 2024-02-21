@@ -1,10 +1,10 @@
 import aiohttp
-from typing import Literal, Optional
+from typing import Literal, Union, Optional, Any, NoReturn
 from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class search_by_id_base:
-    def __init__(self, type: Literal["anime", "manga"], id: int, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False):
+    def __init__(self, type: Literal["anime", "manga"], id: int, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
         """
         fetches an anime/manga based on the provided id
 
@@ -44,7 +44,7 @@ class search_by_id_base:
         self.cache_vol_count = {}
         self.cache_status = {}
         self.data_fetched = False
-    async def _fetch_by_id(self):
+    async def _fetch_by_id(self) -> Union[None, NoReturn]:
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
@@ -65,7 +65,7 @@ class search_by_id_base:
                     raise RATE_LIMITED
                 else: 
                     raise FETCH_ERROR
-    async def kitsu_link(self):
+    async def link(self) -> str:
         """
         the link of the anime/manga
         """
@@ -77,7 +77,7 @@ class search_by_id_base:
         id = self.result[0]["id"]
         self.cache_id[self.cache_key] = id
         return f"https://kitsu.io/{self.type}/{id}"
-    async def id(self):
+    async def id(self) -> int:
         """
         the id of the anime/manga
         """
@@ -88,7 +88,7 @@ class search_by_id_base:
         id = self.result[0]['id']
         self.cache_id[self.cache_key] = id
         return int(id)
-    async def name(self, title_type: str = "en_jp"):
+    async def name(self, title_type: Literal["en_jp", "en", "ja_jp"] = "en_jp") -> str:
         """
         the name of the anime/manga
         """
@@ -102,7 +102,7 @@ class search_by_id_base:
         name = self.result[0]['attributes']['titles'][title_type]
         self.cache_name[self.cache_key] = name
         return name
-    async def plot(self):
+    async def plot(self) -> str:
         """
         the plot of the anime/manga
         """
@@ -113,7 +113,7 @@ class search_by_id_base:
         plot = self.result[0]['attributes']['synopsis']
         self.cache_plot[self.cache_key] = plot
         return plot
-    async def poster_url(self, poster_size: str = "medium"):
+    async def poster_url(self, poster_size: Literal["medium", "small", "large", "tiny", "original"] = "medium") -> str:
         """
         the poster image url of the anime/manga
         """
@@ -127,7 +127,7 @@ class search_by_id_base:
         poster_url = self.result[0]['attributes']['posterImage'][poster_size]
         self.cache_poster_url[self.cache_key] = poster_url
         return poster_url
-    async def favoritesCount(self):
+    async def favorites_count(self) -> int:
         """
         the favorites Count of the anime/manga
         """
@@ -138,7 +138,7 @@ class search_by_id_base:
         favoritesCount = self.result[0]['attributes']['favoritesCount']
         self.cache_favoritescount[self.cache_key] = favoritesCount
         return favoritesCount
-    async def averagerating(self):
+    async def average_rating(self) -> int:
         """
         the average rating of the anime/manga
         """
@@ -149,7 +149,7 @@ class search_by_id_base:
         averagerating = self.result[0]['attributes']['averageRating']
         self.cache_averagerating[self.cache_key] = averagerating
         return averagerating
-    async def rating_rank(self):
+    async def rating_rank(self) -> int:
         """
         the rating rank of the anime/manga
         """
@@ -160,7 +160,7 @@ class search_by_id_base:
         rating_rank = self.result[0]['attributes']['ratingRank']
         self.cache_rating_rank[self.cache_key] = rating_rank
         return rating_rank
-    async def age_rating(self):
+    async def age_rating(self) -> str:
         """
         the age rating of the anime/manga
         """
@@ -171,7 +171,7 @@ class search_by_id_base:
         age_rating = self.result[0]['attributes']['ageRatingGuide']
         self.cache_age_rating[self.cache_key] = age_rating
         return age_rating
-    async def age_rating_type(self):
+    async def age_rating_type(self) -> str:
         """
         the age rating type of the anime/manga
         """
@@ -182,7 +182,7 @@ class search_by_id_base:
         age_rating_type = self.result[0]['attributes']['ageRating']
         self.cache_age_rating_type[self.cache_key] = age_rating_type
         return age_rating_type
-    async def show_type(self):
+    async def show_type(self) -> str:
         """
         the show type of the anime
         """
@@ -196,7 +196,7 @@ class search_by_id_base:
             return show_type
         else:
             raise REQUEST_TYPE_ERROR(_function="show_type:", _type_allowed="anime")
-    async def manga_type(self):
+    async def manga_type(self) -> str:
         """
         the manga type of the manga
         """
@@ -210,7 +210,7 @@ class search_by_id_base:
             return manga_type
         else:
             raise REQUEST_TYPE_ERROR(_function="manga_type:", _type_allowed="manga")
-    async def airing_start_date(self):
+    async def airing_start_date(self) -> str:
         """
         the airing start date of the anime/manga
         """
@@ -221,7 +221,7 @@ class search_by_id_base:
         airing_start_date = self.result[0]['attributes']['startDate']
         self.cache_airing_start_date[self.cache_key] = airing_start_date
         return airing_start_date
-    async def airing_end_date(self):
+    async def airing_end_date(self) -> str:
         """
         the airing end date of the anime/manga
         """
@@ -232,7 +232,7 @@ class search_by_id_base:
         airing_end_date = self.result[0]['attributes']['endDate']
         self.cache_airing_end_date[self.cache_key] = airing_end_date
         return airing_end_date
-    async def nsfw_status(self):
+    async def nsfw_status(self) -> bool:
         """
         the nsfw status of the anime
         """
@@ -246,7 +246,7 @@ class search_by_id_base:
             return nsfw_status
         else:
             raise REQUEST_TYPE_ERROR(_function="nsfw_status:", _type_allowed="anime")
-    async def ep_count(self):
+    async def ep_count(self) -> int:
         """
         the ep count of the anime
         """
@@ -260,7 +260,7 @@ class search_by_id_base:
             return ep_count
         else:
             raise REQUEST_TYPE_ERROR(_function="ep_count:", _type_allowed="anime")
-    async def ep_length(self):
+    async def ep_length(self) -> str:
         """
         the ep length of the anime
         """
@@ -274,7 +274,7 @@ class search_by_id_base:
             return f"{ep_length}m"
         else:
             raise REQUEST_TYPE_ERROR(_function="ep_length:", _type_allowed="anime")
-    async def ch_count(self):
+    async def ch_count(self) -> int:
         """
         the ch count of the manga
         """
@@ -288,7 +288,7 @@ class search_by_id_base:
             return ch_count
         else:
             raise REQUEST_TYPE_ERROR(_function="ch_count:", _type_allowed="manga")
-    async def vol_count(self):
+    async def vol_count(self) -> int:
         """
         the vol count of the manga
         """
@@ -302,7 +302,7 @@ class search_by_id_base:
             return vol_count
         else:
             raise REQUEST_TYPE_ERROR(_function="vol_count:", _type_allowed="manga")
-    async def status(self):
+    async def status(self) -> str:
         """
         the airing status of the anime/manga
         """
@@ -313,7 +313,7 @@ class search_by_id_base:
         status = self.result[0]['attributes']['status']
         self.cache_status[self.cache_key] = status
         return status
-    async def clear_cache(self):
+    async def clear_cache(self) -> None:
         """
         clears the cache
         """
