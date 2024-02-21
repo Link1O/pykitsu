@@ -5,6 +5,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/ore0Os/pykitsu.svg)](https://github.com/ore0Os/pykitsu/issues)
 [![GitHub stars](https://img.shields.io/github/stars/ore0Os/pykitsu.svg)](https://github.com/ore0Os/pykitsu/stargazers)
 [![discord](https://img.shields.io/badge/discord-join-blue.svg)](https://discord.gg/aFf7TdJdFV)
+[![Downloads](https://static.pepy.tech/badge/pykitsu)](https://pepy.tech/project/pykitsu)
+[![Downloads](https://static.pepy.tech/badge/pykitsu/month)](https://pepy.tech/project/pykitsu)
+[![Downloads](https://static.pepy.tech/badge/pykitsu/week)](https://pepy.tech/project/pykitsu)
 
 This is an asynchronous and high-speed Python API wrapper for accessing Kitsu.io API.
 
@@ -24,13 +27,17 @@ This is an asynchronous and high-speed Python API wrapper for accessing Kitsu.io
 
 ## Installation
 
-You can install the library using:
+### stable version
 
 ```bash
 pip install pykitsu
 ```
+### development version
+```bash
+pip install git+https://github.com/ore0Os/pykitsu.git
+```
 
-and you can install the requirements using:
+### requirements
 
 ```bash
 pip install -r https://raw.githubusercontent.com/ore0Os/pykitsu/main/requirements.txt
