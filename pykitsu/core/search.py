@@ -1,16 +1,16 @@
 import aiohttp
-from typing import Literal, Union, Optional, Any, NoReturn
+from typing import Literal, Union, Optional, NoReturn
 from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class search_base:
-    def __init__(self, type: Literal["anime", "manga"], search_term: Any, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
+    def __init__(self, type: Literal["anime", "manga"], search_term: Union[str, int, float], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
         """
         fetches an anime/manga based on the provided search term (paginated)
 
         parameters:
             type (str): anime/manga
-            search_term (Any): the anime/manga name
+            search_term (str | int | float): the anime/manga name
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """ 
