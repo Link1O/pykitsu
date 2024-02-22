@@ -1,5 +1,5 @@
 import aiohttp
-from typing import Literal, Union, Optional, Any, NoReturn
+from typing import Literal, Union, Optional, NoReturn
 from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *

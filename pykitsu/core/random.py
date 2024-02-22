@@ -1,5 +1,5 @@
 import aiohttp
-from typing import Literal, Union, Optional, Any, NoReturn
+from typing import Literal, Union, Optional, NoReturn
 import random
 from ..utils import __RequestLimiter__
 from ..utils import get_latest
