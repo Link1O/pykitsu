@@ -32,7 +32,7 @@ This is an asynchronous and high-speed Python API wrapper for accessing Kitsu.io
 ```bash
 pip install pykitsu
 ```
-### development version
+### rolling releases version
 ```bash
 pip install git+https://github.com/ore0Os/pykitsu.git
 ```
