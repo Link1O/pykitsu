@@ -4,26 +4,26 @@ from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class search_base:
-    def __init__(self, type: Literal["anime", "manga"], search_term: Union[str, int, float], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
+    def __init__(self, type_: Literal["anime", "manga"], search_term: Union[str, int, float], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
         """
         fetches an anime/manga based on the provided search term (paginated)
 
         parameters:
-            type (str): anime/manga
+            type_ (Literal): anime/manga
             search_term (str | int | float): the anime/manga name
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """ 
-        self.type = type
+        self.type_ = type_
         valid_types = {"anime", "manga"}
-        if self.type not in valid_types:
+        if self.type_ not in valid_types:
             raise INVALID_ARGUMENT("search type")
         self.search_term = search_term
         self.limit_requests = limit_requests
         if self.limit_requests:
             self.request_limiter = __RequestLimiter__()
         self.debug_outputs = debug_outputs
-        self.cache_key = (self.type, self.search_term)
+        self.cache_key = (self.type_, self.search_term)
         self.cache_id = {}
         self.cache_name = {}
         self.cache_plot = {}
@@ -48,7 +48,7 @@ class search_base:
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
-            async with session.get(url=f"https://kitsu.io/api/edge/{self.type}", params={
+            async with session.get(url=f"https://kitsu.io/api/edge/{self.type_}", params={
             "filter[text]": self.search_term
         }) as response:
                 if response.status == 200:
@@ -74,13 +74,13 @@ class search_base:
         """
         if self.cache_key in self.cache_id:
             id = self.cache_id[self.cache_key]
-            return f"https://kitsu.io/{self.type}/{id}"
+            return f"https://kitsu.io/{self.type_}/{id}"
         if not self.data_fetched:
             await self._fetch()
         id = self.result[offset]["id"]
         self.cache_id[self.cache_key] = id
-        return f"https://kitsu.io/{self.type}/{id}"
-    async def id(self, offset: int = 0) -> int:
+        return f"https://kitsu.io/{self.type_}/{id}"
+    async def id_(self, offset: int = 0) -> int:
         """
         the id of the anime/manga
 
@@ -219,7 +219,7 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if self.cache_key in self.cache_show_type:
                 return self.cache_show_type[self.cache_key]
             if not self.data_fetched:
@@ -236,7 +236,7 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if self.cache_key in self.cache_manga_type:
                 return self.cache_manga_type[self.cache_key]
             if not self.data_fetched:
@@ -281,7 +281,7 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if self.cache_key in self.cache_nsfw_status:
                 return self.cache_nsfw_status[self.cache_key]
             if not self.data_fetched:
@@ -298,7 +298,7 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if self.cache_key in self.cache_ep_count:
                 return self.cache_ep_count[self.cache_key]
             if not self.data_fetched:
@@ -315,7 +315,7 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if self.cache_key in self.cache_ep_length:
                 return self.cache_ep_length[self.cache_key]
             if not self.data_fetched:
@@ -332,7 +332,7 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if self.cache_key in self.cache_ch_count:
                 return self.cache_ch_count[self.cache_key]
             if not self.data_fetched:
@@ -349,7 +349,7 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if self.cache_key in self.cache_vol_count:
                 return self.cache_vol_count[self.cache_key]
             if not self.data_fetched:
@@ -384,6 +384,7 @@ class search_base:
             for target in __targets__:
                 target.clear()
             return
+        self.cache_id.clear()
         self.cache_name.clear()
         self.cache_plot.clear()
         self.cache_poster_url.clear()

@@ -6,20 +6,20 @@ from ..utils import get_latest
 from ..exceptions import *
 from ..value_errors import *
 class random_base:
-    def __init__(self, type: Literal["anime", "manga"], range_from_latest: Optional[bool] = False, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
+    def __init__(self, type_: Literal["anime", "manga"], range_from_latest: Optional[bool] = False, limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
         """
         fetches an anime/manga randomly
 
         parameters:
-            type (str): anime/manga
+            type_ (Literal): anime/manga
             range_from_latest (bool): fetch the range from the latest added anime/manga (unstable), options: True | False (defuelt: False)
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """
-        self.type = type
+        self.type_ = type_
         self.range_from_latest = range_from_latest
         valid_types = {"anime", "manga"}
-        if self.type not in valid_types:
+        if self.type_ not in valid_types:
             raise INVALID_ARGUMENT("search type")
         self.limit_requests = limit_requests
         if self.limit_requests:
@@ -28,13 +28,13 @@ class random_base:
         self.data_fetched = False
     async def _fetch_random(self) -> Union[None, NoReturn]:
         if self.range_from_latest:
-            rand_int = random.randint(1, await get_latest(type=self.type))
+            rand_int = random.randint(1, await get_latest(type=self.type_))
         else:
             rand_int = random.randint(1, 1600)
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
-            async with session.get(url=f"https://kitsu.io/api/edge/{self.type}", params={
+            async with session.get(url=f"https://kitsu.io/api/edge/{self.type_}", params={
             "filter[id]": rand_int
         }) as response:
                 if response.status == 200:
@@ -54,13 +54,13 @@ class random_base:
         """
         if self.cache_key in self.cache_id:
             id = self.cache_id[self.cache_key]
-            return f"https://kitsu.io/{self.type}/{id}"
+            return f"https://kitsu.io/{self.type_}/{id}"
         if not self.data_fetched:
             await self._fetch_random()
         id = self.result[0]["id"]
         self.cache_id[self.cache_key] = id
-        return f"https://kitsu.io/{self.type}/{id}"
-    async def id(self) -> int:
+        return f"https://kitsu.io/{self.type_}/{id}"
+    async def id_(self) -> int:
         """
         the id of the anime/manga
         """
@@ -142,7 +142,7 @@ class random_base:
         """
         the show type of the anime
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_random()
             show_type = self.result[0]['attributes']['showType']
@@ -153,7 +153,7 @@ class random_base:
         """
         the manga type of the manga
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if not self.data_fetched:
                 await self._fetch_random()
             manga_type = self.result[0]['attributes']['mangaType']
@@ -180,7 +180,7 @@ class random_base:
         """
         the nsfw status of the anime
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_random()
             nsfw_status = self.result[0]['attributes']['nsfw']
@@ -191,7 +191,7 @@ class random_base:
         """
         the ep count of the anime
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_random()
             ep_count = self.result[0]['attributes']['episodeCount']
@@ -202,7 +202,7 @@ class random_base:
         """
         the ep length of the anime
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_random()
             ep_length = self.result[0]['attributes']['episodeLength']
@@ -213,7 +213,7 @@ class random_base:
         """
         the ch count of the manga
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if not self.data_fetched:
                 await self._fetch_random()
             ch_count = self.result[0]['attributes']['chapterCount']
@@ -224,7 +224,7 @@ class random_base:
         """
         the vol count of the manga
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if not self.data_fetched:
                 await self._fetch_random()
             vol_count = self.result[0]['attributes']['volumeCount']

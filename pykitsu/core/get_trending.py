@@ -1,21 +1,21 @@
 import aiohttp
-from typing import Literal, Union, Optional, NoReturn
+from typing import Literal, Union, Optional, Any, NoReturn
 from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
 class get_trending_base:
-    def __init__(self, type: Literal["anime", "manga"], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
+    def __init__(self, type_: Literal["anime", "manga"], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
         """
         fetches an anime/manga randomly
 
         parameters:
-            type (str): anime/manga
+            type_ (Literal): anime/manga
             limit_requests (bool): the rate limiting status, options: True | False (default: False)
             debug_outputs (bool): debug outputs status, options: True | False (default: False)
         """
-        self.type = type
+        self.type_ = type_
         valid_types = {"anime", "manga"}
-        if self.type not in valid_types:
+        if self.type_ not in valid_types:
             raise INVALID_ARGUMENT("search type")
         self.limit_requests = limit_requests
         if self.limit_requests:
@@ -26,7 +26,7 @@ class get_trending_base:
         if self.limit_requests:
             await self.request_limiter._limit_request()
         async with aiohttp.ClientSession() as session:
-            async with session.get(url=f"https://kitsu.io/api/edge/trending/{self.type}") as response:
+            async with session.get(url=f"https://kitsu.io/api/edge/trending/{self.type_}") as response:
                 if response.status == 200:
                     self.data = await response.json()
                     await session.close()
@@ -46,13 +46,13 @@ class get_trending_base:
         """
         if self.cache_key in self.cache_id:
             id = self.cache_id[self.cache_key]
-            return f"https://kitsu.io/{self.type}/{id}"
+            return f"https://kitsu.io/{self.type_}/{id}"
         if not self.data_fetched:
             await self._fetch_trending()
         id = self.result[offset]["id"]
         self.cache_id[self.cache_key] = id
-        return f"https://kitsu.io/{self.type}/{id}"
-    async def id(self, offset: int = 0) -> int:
+        return f"https://kitsu.io/{self.type_}/{id}"
+    async def id_(self, offset: int = 0) -> int:
         """
         the id of the anime/manga
         parameters:
@@ -154,7 +154,7 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_trending()
             show_type = self.result[offset]['attributes']['showType']
@@ -167,7 +167,7 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if not self.data_fetched:
                 await self._fetch_trending()
             manga_type = self.result[offset]['attributes']['mangaType']
@@ -200,7 +200,7 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_trending()
             nsfw_status = self.result[offset]['attributes']['nsfw']
@@ -213,7 +213,7 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_trending()
             ep_count = self.result[offset]['attributes']['episodeCount']
@@ -226,7 +226,7 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "anime":
+        if self.type_ == "anime":
             if not self.data_fetched:
                 await self._fetch_trending()
             ep_length = self.result[offset]['attributes']['episodeLength']
@@ -239,7 +239,7 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if not self.data_fetched:
                 await self._fetch_trending()
             ch_count = self.result[offset]['attributes']['chapterCount']
@@ -252,7 +252,7 @@ class get_trending_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.type == "manga":
+        if self.type_ == "manga":
             if not self.data_fetched:
                 await self._fetch_trending()
             vol_count = self.result[offset]['attributes']['volumeCount']
