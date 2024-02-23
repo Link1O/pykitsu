@@ -1,4 +1,4 @@
-# A fast and asynchronous API wrapper for kitsue.io
+# A fast and asynchronous API wrapper for kitsu.io
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ore0Os/pykitsu/blob/main/LICENCE)
 [![Python](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
