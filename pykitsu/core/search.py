@@ -3,6 +3,7 @@ from typing import Literal, Union, Optional, NoReturn
 from ..utils import __RequestLimiter__
 from ..exceptions import *
 from ..value_errors import *
+_cache = {}
 class search_base:
     def __init__(self, type_: Literal["anime", "manga"], search_term: Union[str, int, float], limit_requests: Optional[bool] = False, debug_outputs: Optional[bool] = False) -> None:
         """
@@ -23,26 +24,6 @@ class search_base:
         if self.limit_requests:
             self.request_limiter = __RequestLimiter__()
         self.debug_outputs = debug_outputs
-        self.cache_key = (self.type_, self.search_term)
-        self.cache_id = {}
-        self.cache_name = {}
-        self.cache_plot = {}
-        self.cache_poster_url = {}
-        self.cache_favoritescount = {}
-        self.cache_averagerating = {}
-        self.cache_rating_rank = {}
-        self.cache_age_rating = {}
-        self.cache_age_rating_type = {}
-        self.cache_show_type = {}
-        self.cache_manga_type = {}
-        self.cache_airing_start_date = {}
-        self.cache_airing_end_date = {}
-        self.cache_nsfw_status = {}
-        self.cache_ep_count = {}
-        self.cache_ep_length = {}
-        self.cache_ch_count = {}
-        self.cache_vol_count = {}
-        self.cache_status = {}
         self.data_fetched = False
     async def _fetch(self) -> Union[None, NoReturn]:
         if self.limit_requests:
@@ -65,6 +46,21 @@ class search_base:
                     raise RATE_LIMITED
                 else:
                     raise FETCH_ERROR
+    async def _get_cached_data(self, offset: int, field: str, addons_title_type: str = None, addons_poster_zize: str = None) -> Union[str, None]:
+        key = f"{self.type_}_{self.search_term}_{offset}"
+        if addons_title_type:
+            return _cache.get(key, {}).get(field, {}).get(addons_title_type)
+        if addons_poster_zize:
+            return _cache.get(key, {}).get(field, {}).get(addons_poster_zize)
+        return _cache.get(key, {}).get(field)
+    async def _set_cached_data(self, offset: int, field: str, value: str, addons_title_type: str = None, addons_poster_zize: str = None) -> None:
+        key = f"{self.type_}_{self.search_term}_{offset}"
+        if addons_title_type:
+            _cache.setdefault(key, {}).setdefault(field, {})[addons_title_type] = value
+        elif addons_poster_zize:
+            _cache.setdefault(key, {}).setdefault(field, {})[addons_poster_zize] = value
+        else:
+            _cache.setdefault(key, {})[field] = value
     async def link(self, offset: int = 0) -> str:
         """
         the link of the anime/manga
@@ -72,14 +68,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_id:
-            id = self.cache_id[self.cache_key]
-            return f"https://kitsu.io/{self.type_}/{id}"
+        id_ = await self._get_cached_data(offset=offset, field="id")
+        if id_:
+            return f"https://kitsu.io/{self.type_}/{id_}"
         if not self.data_fetched:
             await self._fetch()
-        id = self.result[offset]["id"]
-        self.cache_id[self.cache_key] = id
-        return f"https://kitsu.io/{self.type_}/{id}"
+        id_ = self.result[offset]["id"]
+        await self._set_cached_data(offset=offset, field="id", value=id_)
+        return f"https://kitsu.io/{self.type_}/{id_}"
     async def id_(self, offset: int = 0) -> int:
         """
         the id of the anime/manga
@@ -87,13 +83,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_id:
-            return self.cache_id[self.cache_key]
+        id_ = await self._get_cached_data(offset=offset, field="id")
+        if id_:
+            return f"https://kitsu.io/{self.type_}/{id_}"
         if not self.data_fetched:
             await self._fetch()
-        id = self.result[offset]['id']
-        self.cache_id[self.cache_key] = id
-        return int(id)
+        id_ = self.result[offset]['id']
+        await self._set_cached_data(offset=offset, field="id", value=id_)
+        return int(id_)
     async def name(self, title_type: Literal["en_jp", "en", "ja_jp"] = "en_jp", offset: int = 0) -> str:
         """
         the name of the anime/manga
@@ -104,12 +101,13 @@ class search_base:
         valid_title_types = {"en_jp", "en", "ja_jp"}
         if title_type not in valid_title_types:
             raise INVALID_ARGUMENT("title type")
-        if self.cache_key in self.cache_name:
-            return self.cache_name[self.cache_key]
+        name = await self._get_cached_data(offset=offset, field="name", addons_title_type=title_type)
+        if name:
+            return name
         if not self.data_fetched:
             await self._fetch()
         name = self.result[offset]['attributes']['titles'][title_type]
-        self.cache_name[self.cache_key] = name
+        await self._set_cached_data(offset=offset, field="name", value=name, addons_title_type=title_type)
         return name
     async def plot(self, offset: int = 0) -> str:
         """
@@ -118,12 +116,13 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_plot:
-            return self.cache_plot[self.cache_key]
+        plot = await self._get_cached_data(offset=offset, field="plot")
+        if plot:
+            return plot
         if not self.data_fetched:
             await self._fetch()
         plot = self.result[offset]['attributes']['synopsis']
-        self.cache_plot[self.cache_key] = plot
+        await self._set_cached_data(offset=offset, field="plot", value=plot)
         return plot
     async def poster_url(self, poster_size: Literal["medium", "small", "large", "tiny", "original"] = "medium", offset: int = 0) -> str:
         """
@@ -135,12 +134,13 @@ class search_base:
         valid_poster_sizes = {"medium", "small", "large", "tiny", "original"}
         if poster_size not in valid_poster_sizes:
             raise INVALID_ARGUMENT("poster size")
-        if self.cache_key in self.cache_poster_url:
-            return self.cache_poster_url[self.cache_key]
+        poster_url = await self._get_cached_data(offset=offset, field="poster_url", addons_poster_zize=poster_size)
+        if poster_url:
+            return poster_url
         if not self.data_fetched:
             await self._fetch()
         poster_url = self.result[offset]['attributes']['posterImage'][poster_size]
-        self.cache_poster_url[self.cache_key] = poster_url
+        await self._set_cached_data(offset=offset, field="poster_url", value=poster_url, addons_poster_zize=poster_size)
         return poster_url
     async def favorites_count(self, offset: int = 0) -> int:
         """
@@ -149,13 +149,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_favoritescount:
-            return self.cache_favoritescount[self.cache_key]
+        favorites_count = await self._get_cached_data(offset=offset, field="favorites_count")
+        if favorites_count:
+            return favorites_count
         if not self.data_fetched:
             await self._fetch()
-        favoritesCount = self.result[offset]['attributes']['favoritesCount']
-        self.cache_favoritescount[self.cache_key] = favoritesCount
-        return favoritesCount
+        favorites_count = self.result[offset]['attributes']['favoritesCount']
+        await self._set_cached_data(offset=offset, field="favorites_count", value=favorites_count)
+        return favorites_count
     async def average_rating(self, offset: int = 0) -> int:
         """
         the average rating of the anime/manga
@@ -163,13 +164,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_averagerating:
-            return self.cache_averagerating[self.cache_key]
+        average_rating = await self._get_cached_data(offset=offset, field="average_rating")
+        if average_rating:
+            return average_rating
         if not self.data_fetched:
             await self._fetch()
-        averagerating = self.result[offset]['attributes']['averageRating']
-        self.cache_averagerating[self.cache_key] = averagerating
-        return averagerating
+        average_rating = self.result[offset]['attributes']['averageRating']
+        await self._set_cached_data(offset=offset, field="average_rating", value=average_rating)
+        return average_rating
     async def rating_rank(self, offset: int = 0) -> int:
         """
         the rating rank of the anime/manga
@@ -177,12 +179,13 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_rating_rank:
-            return self.cache_rating_rank[self.cache_key]
+        rating_rank = await self._get_cached_data(offset=offset, field="rating_rank")
+        if rating_rank:
+            return rating_rank
         if not self.data_fetched:
             await self._fetch()
         rating_rank = self.result[offset]['attributes']['ratingRank']
-        self.cache_rating_rank[self.cache_key] = rating_rank
+        await self._set_cached_data(offset=offset, field="rating_rank", value=rating_rank)
         return rating_rank
     async def age_rating(self, offset: int = 0) -> str:
         """
@@ -191,12 +194,13 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_age_rating:
-            return self.cache_age_rating[self.cache_key]
+        age_rating = await self._get_cached_data(offset=offset, field="age_rating")
+        if age_rating:
+            return age_rating
         if not self.data_fetched:
             await self._fetch()
         age_rating = self.result[offset]['attributes']['ageRatingGuide']
-        self.cache_age_rating[self.cache_key] = age_rating
+        await self._set_cached_data(offset=offset, field="age_rating", value=age_rating)
         return age_rating
     async def age_rating_type(self, offset: int = 0) -> str:
         """
@@ -205,12 +209,13 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_age_rating_type:
-            return self.cache_age_rating_type[self.cache_key]
+        age_rating_type = await self._get_cached_data(offset=offset, field="age_rating_type")
+        if age_rating_type:
+            return age_rating_type
         if not self.data_fetched:
             await self._fetch()
         age_rating_type = self.result[offset]['attributes']['ageRating']
-        self.cache_age_rating_type[self.cache_key] = age_rating_type
+        await self._set_cached_data(offset=offset, field="age_rating_type", value=age_rating_type)
         return age_rating_type
     async def show_type(self, offset: int = 0) -> str:
         """
@@ -219,13 +224,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
+        show_type = await self._get_cached_data(offset=offset, field="show_type")
+        if show_type:
+            return show_type
         if self.type_ == "anime":
-            if self.cache_key in self.cache_show_type:
-                return self.cache_show_type[self.cache_key]
             if not self.data_fetched:
                 await self._fetch()
             show_type = self.result[offset]['attributes']['showType']
-            self.cache_show_type[self.cache_key] = show_type
+            await self._set_cached_data(offset=offset, field="show_type", value=show_type)
             return show_type
         else:
             raise REQUEST_TYPE_ERROR(_function="show_type:", _type_allowed="anime")
@@ -236,13 +242,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
+        manga_type = await self._get_cached_data(offset=offset, field="manga_type")
+        if manga_type:
+            return manga_type
         if self.type_ == "manga":
-            if self.cache_key in self.cache_manga_type:
-                return self.cache_manga_type[self.cache_key]
             if not self.data_fetched:
                 await self._fetch()
             manga_type = self.result[offset]['attributes']['mangaType']
-            self.cache_manga_type[self.cache_key] = manga_type
+            await self._set_cached_data(offset=offset, field="manga_type", value=manga_type)
             return manga_type
         else:
             raise REQUEST_TYPE_ERROR(_function="manga_type:", _type_allowed="manga")
@@ -253,12 +260,13 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_airing_start_date:
-            return self.cache_airing_start_date[self.cache_key]
+        airing_start_date = await self._get_cached_data(offset=offset, field="airing_start_date")
+        if airing_start_date:
+            return airing_start_date
         if not self.data_fetched:
             await self._fetch()
         airing_start_date = self.result[offset]['attributes']['startDate']
-        self.cache_airing_start_date[self.cache_key] = airing_start_date
+        await self._set_cached_data(offset=offset, field="airing_start_date", value=airing_start_date)
         return airing_start_date
     async def airing_end_date(self, offset: int = 0) -> str:
         """
@@ -267,12 +275,13 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_airing_end_date:
-            return self.cache_airing_end_date[self.cache_key]
+        airing_end_date = await self._get_cached_data(offset=offset, field="airing_end_date")
+        if airing_end_date:
+            return airing_end_date
         if not self.data_fetched:
             await self._fetch()
         airing_end_date = self.result[offset]['attributes']['endDate']
-        self.cache_airing_end_date[self.cache_key] = airing_end_date
+        await self._set_cached_data(offset=offset, field="airing_end_date", value=airing_end_date)
         return airing_end_date
     async def nsfw_status(self, offset: int = 0) -> bool:
         """
@@ -281,13 +290,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
+        nsfw_status = await self._get_cached_data(offset=offset, field="nsfw_status")
+        if nsfw_status:
+            return nsfw_status
         if self.type_ == "anime":
-            if self.cache_key in self.cache_nsfw_status:
-                return self.cache_nsfw_status[self.cache_key]
             if not self.data_fetched:
                 await self._fetch()
             nsfw_status = self.result[offset]['attributes']['nsfw']
-            self.cache_nsfw_status[self.cache_key] = nsfw_status
+            await self._set_cached_data(offset=offset, field="nsfw_status", value=nsfw_status)
             return nsfw_status
         else:
             raise REQUEST_TYPE_ERROR(_function="nsfw_status:", _type_allowed="anime")
@@ -298,13 +308,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
+        ep_count = await self._get_cached_data(offset=offset, field="ep_count")
+        if ep_count:
+            return ep_count
         if self.type_ == "anime":
-            if self.cache_key in self.cache_ep_count:
-                return self.cache_ep_count[self.cache_key]
             if not self.data_fetched:
                 await self._fetch()
             ep_count = self.result[offset]['attributes']['episodeCount']
-            self.cache_ep_count[self.cache_key] = ep_count
+            await self._set_cached_data(offset=offset, field="ep_count", value=ep_count)
             return ep_count
         else:
             raise REQUEST_TYPE_ERROR(_function="ep_count:", _type_allowed="anime")
@@ -315,13 +326,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
+        ep_length = await self._get_cached_data(offset=offset, field="ep_length")
+        if ep_length:
+            return ep_length
         if self.type_ == "anime":
-            if self.cache_key in self.cache_ep_length:
-                return self.cache_ep_length[self.cache_key]
             if not self.data_fetched:
                 await self._fetch()
             ep_length = self.result[offset]['attributes']['episodeLength']
-            self.cache_ep_length[self.cache_key] = ep_length
+            await self._set_cached_data(offset=offset, field="ep_length", value=ep_length)
             return f"{ep_length}m"
         else:
             raise REQUEST_TYPE_ERROR(_function="ep_length:", _type_allowed="anime")
@@ -332,13 +344,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
+        ch_count = await self._get_cached_data(offset=offset, field="ch_count")
+        if ch_count:
+            return ch_count
         if self.type_ == "manga":
-            if self.cache_key in self.cache_ch_count:
-                return self.cache_ch_count[self.cache_key]
             if not self.data_fetched:
                 await self._fetch()
             ch_count = self.result[offset]['attributes']['chapterCount']
-            self.cache_ch_count[self.cache_key] = ch_count
+            await self._set_cached_data(offset=offset, field="ch_count", value=ch_count)
             return ch_count
         else:
             raise REQUEST_TYPE_ERROR(_function="ch_count:", _type_allowed="manga")
@@ -349,13 +362,14 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
+        vol_count = await self._get_cached_data(offset=offset, field="vol_count")
+        if vol_count:
+            return vol_count
         if self.type_ == "manga":
-            if self.cache_key in self.cache_vol_count:
-                return self.cache_vol_count[self.cache_key]
             if not self.data_fetched:
                 await self._fetch()
             vol_count = self.result[offset]['attributes']['volumeCount']
-            self.cache_vol_count[self.cache_key] = vol_count
+            await self._set_cached_data(offset=offset, field="vol_count", value=vol_count)
             return vol_count
         else:
             raise REQUEST_TYPE_ERROR(_function="vol_count:", _type_allowed="manga")
@@ -366,12 +380,13 @@ class search_base:
         parameters:
             offset (int): the fetched data offset, (default: 0)
         """
-        if self.cache_key in self.cache_status:
-            return self.cache_status[self.cache_key]
+        status = await self._get_cached_data(offset=offset, field="status")
+        if status:
+            return status
         if not self.data_fetched:
             await self._fetch()
         status = self.result[offset]['attributes']['status']
-        self.cache_status[self.cache_key] = status
+        await self._set_cached_data(offset=offset, field="status", value=status)
         return status
     async def clear_cache(self, __targets__: Optional[list] = None) -> None:
         """
@@ -382,26 +397,8 @@ class search_base:
         """
         if __targets__:
             for target in __targets__:
-                target.clear()
+                del _cache[target]
             return
-        self.cache_id.clear()
-        self.cache_name.clear()
-        self.cache_plot.clear()
-        self.cache_poster_url.clear()
-        self.cache_favoritescount.clear()
-        self.cache_averagerating.clear()
-        self.cache_rating_rank.clear()
-        self.cache_age_rating.clear()
-        self.cache_age_rating_type.clear()
-        self.cache_show_type.clear()
-        self.cache_manga_type.clear()
-        self.cache_airing_start_date.clear()
-        self.cache_airing_end_date.clear()
-        self.cache_nsfw_status.clear()
-        self.cache_ep_count.clear()
-        self.cache_ep_length.clear()
-        self.cache_ch_count.clear()
-        self.cache_vol_count.clear()
-        self.cache_status.clear()
+        _cache.clear()
         if self.debug_outputs:
             print(f"{Fore.BLUE}[pykitsu: {Fore.RED}debug output{Fore.BLUE}] {Fore.MAGENTA}cache cleared.{Fore.RESET}")
