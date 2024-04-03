@@ -50,9 +50,10 @@ class search_base:
         key = f"{self.type_}_{self.search_term}_{offset}"
         if addons_title_type:
             return _cache.get(key, {}).get(field, {}).get(addons_title_type)
-        if addons_poster_zize:
+        elif addons_poster_zize:
             return _cache.get(key, {}).get(field, {}).get(addons_poster_zize)
-        return _cache.get(key, {}).get(field)
+        else:
+            return _cache.get(key, {}).get(field)
     async def _set_cached_data(self, offset: int, field: str, value: str, addons_title_type: str = None, addons_poster_zize: str = None) -> None:
         key = f"{self.type_}_{self.search_term}_{offset}"
         if addons_title_type:
